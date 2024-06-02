@@ -11,13 +11,16 @@ steps:
   - env GOOS=linux GOARCH=amd64 go build -o demo-app
 
 - name: dockerPush
-  image: plugins/docker
-  settings: 
-    repo: shengzhen4docker/go
-    use_cache: true
-    username:
-      from_secret: docker_username
-    password:
+  image: docker:dind
+  environment:
+    DOCKER_PASSWORD:
       from_secret: docker_password
-  tags:
-    - latest
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  commands:
+    - sleep 5
+    - cd src
+    - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+    - DOCKER_BUILDKIT=1 docker build -t shengzhen4docker/go:v1.0 .
+    - docker push  shengzhen4docker/go:v1.0
+  
