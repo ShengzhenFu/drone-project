@@ -5,3 +5,5 @@ code structure
 - .drone.yml        : define the pipeline
 - src               : a simple Golang program, for go build, go test and docker build
 
+
+![drone ci](./drone-ci.png "drone ci snapshot")
