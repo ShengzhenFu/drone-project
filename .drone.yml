@@ -25,6 +25,3 @@ steps:
   tags:
     - 1.0
     - latest
-  when:
-    event: push
-    branch: main
