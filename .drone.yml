@@ -21,6 +21,7 @@ steps:
     - sleep 5
     - cd src
     - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+    - sleep 10
     - DOCKER_BUILDKIT=1 docker build -t shengzhen4docker/go:v1.0 .
     - docker push  shengzhen4docker/go:v1.0
   
