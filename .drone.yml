@@ -12,16 +12,12 @@ steps:
 
 - name: dockerPush
   image: plugins/docker
-  environment:
-    USERNAME:
-      from_secret: docker_username
-    PASSWORD:
-      from_secret: docker_password
   settings: 
     repo: shengzhen4docker/go
     use_cache: true
-    username: $USERNAME
-    password: $PASSWORD
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
   tags:
-    - 1.0
     - latest
