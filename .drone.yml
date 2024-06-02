@@ -3,8 +3,28 @@ type: docker
 name: default
 
 steps:
-- name: greeting
-  image: alpine
+- name: gobuild
+  image: golang:1.22.3
   commands:
-  - echo hello
-  - echo world
+  - echo go build
+  - cd src
+  - env GOOS=linux GOARCH=amd64 go build -o demo-app
+
+- name: dockerPush
+  image: plugins/docker
+  environment:
+    USERNAME:
+      from_secret: docker_username
+    PASSWORD:
+      from_secret: docker_password
+  settings: 
+    repo: shengzhen4docker/go
+    use_cache: true
+    username: $USERNAME
+    password: $PASSWORD
+  tags:
+    - 1.0
+    - latest
+  when:
+    event: push
+    branch: main
