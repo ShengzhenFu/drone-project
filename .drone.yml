@@ -12,16 +12,29 @@ steps:
 
 - name: dockerPush
   image: docker:dind
+  volumes:
+    - name: dockersock
+      path: /var/run
   environment:
     DOCKER_PASSWORD:
       from_secret: docker_password
     DOCKER_USERNAME:
       from_secret: docker_username
   commands:
-    - sleep 5
+    - sleep 10
     - cd src
     - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
-    - sleep 10
     - DOCKER_BUILDKIT=1 docker build -t shengzhen4docker/go:v1.0 .
     - docker push  shengzhen4docker/go:v1.0
-  
+
+services:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
+volumes:
+  - name: dockersock
+    temp: {}  
