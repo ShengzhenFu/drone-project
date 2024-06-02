@@ -12,6 +12,7 @@ steps:
 
 - name: dockerPush
   image: docker:stable-dind
+  privileged: true
   environment:
     DOCKER_PASSWORD:
       from_secret: docker_password
