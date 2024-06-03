@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  woodpecker-server:
+    image: woodpeckerci/woodpecker-server:latest
+    container_name: woodpecker-server
+    ports:
+      - 8000:8000
+    volumes:
+      - /home/shengzhen/ci-demo/woodpecker-server-data:/var/lib/woodpecker
+    environment:
+      - WOODPECKER_HOST=https://ci-demo.shengzhen.xyz
+      - WOODPECKER_OPEN=false
+      - WOODPECKER_ADMIN=ShengzhenFu
+      - WOODPECKER_LOG_LEVEL=debug
+      - WOODPECKER_LOG_FILE=stdout
+      - WOODPECKER_DEBUG_PRETTY=true 
+      - WOODPECKER_DATABASE_DRIVER=sqlite3
+      - WOODPECKER_DATABASE_DATASOURCE=/var/lib/woodpecker/woodpecker.sqlite
+        #- WOODPECKER_SERVER_CERT=/var/lib/woodpecker/cert/cert.pem
+      - WOODPECKER_GITHUB=true
+      - WOODPECKER_GITHUB_CLIENT=${WOODPECKER_GITHUB_CLIENT}
+      - WOODPECKER_GITHUB_SECRET=${WOODPECKER_GITHUB_SECRET}
+        #- WOODPECKER_GITHUB_SKIP_VERIFY=true
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+      - WOODPECKER_DEBUG=true
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:latest
+    container_name: woodpecker-agent
+    command: agent
+    restart: always
+    depends_on:
+      - woodpecker-server
+    volumes:
+      - /home/shengzhen/ci-demo/woodpecker-agent-config:/etc/woodpecker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker-server:9000
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+
