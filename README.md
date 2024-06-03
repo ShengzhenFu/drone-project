@@ -22,4 +22,4 @@ code structure
 
 
 **Woodpecker Pipeline**
-![woodpecker pipeline](./woodpecker-ci-pipeline "woodpecker ci pipeline snapshot")
+![woodpecker pipeline](./woodpecker-ci-pipeline.png "woodpecker ci pipeline snapshot")
